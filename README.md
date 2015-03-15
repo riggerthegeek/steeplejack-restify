@@ -26,7 +26,7 @@ Restify implementation for steeplejack
 [quality-image]: http://img.shields.io/codeclimate/github/slashdevslashnull/steeplejack-restify.svg?style=flat
 [dependencies-image]: http://img.shields.io/david/slashdevslashnull/steeplejack-restify.svg?style=flat
 [dev-dependencies-image]: http://img.shields.io/david/dev/slashdevslashnull/steeplejack-restify.svg?style=flat
-[license-image]: http://img.shields.io/:license-proprietary-red.svg?style=flat
+[license-image]: http://img.shields.io/:license-MIT-green.svg?style=flat
 
 [node-version-url]: http://nodejs.org/download/
 [travis-url]: https://travis-ci.org/slashdevslashnull/steeplejack-restify
