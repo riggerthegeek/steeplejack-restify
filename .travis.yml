@@ -10,3 +10,12 @@ before_install:
 script:
 - grunt ci
 - grunt coveralls:push
+deploy:
+  provider: npm
+  email: simon@simonemms.com
+  api_key:
+    secure: Tpz/DnfESujPs5FCOY9EVO7fXDQC/gxPWlOu5NJmFn4DQ721EiulEXhEX+7tgBCkrI1IBr8XbIR58ZmcXc3SOH2UEPit+S3f/J2Hxy5Xd/wXMmIdBNKPwN/Ac3KuJIzZ6283k57DRH3MInWRbZDPssT4rMqKwqViwGaDPWToVgE=
+  on:
+    all_branches: true
+    tags: true
+    repo: slash-dev-slash-null/steeplejack-restify
