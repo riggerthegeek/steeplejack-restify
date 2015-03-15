@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+#- '0.12'
+- '0.10'
+matrix:
+  fast_finish: true
+sudo: false
+before_install:
+- npm install -g grunt-cli
+services:
+- mongodb
+script:
+- grunt test
+- grunt coverage
+- grunt coveralls:push
+- grunt codeclimate
+deploy:
+  provider: openshift
+  user: riggerthegeek
+  password:
+    secure: m0UWOVgM8QV7vOWd+YI8MyKqR7VygK7w+O7bMLYxTIEQR1mtN2MbhkynS0rkGyyU1ZLbtqt+SA14vHq7g+hgTsKiFu2/dmZiiB5MBUnZnuJD0iFwow+4P687GXyUFoIGgmmbpa516uXz1dzYe5CiSVp3KB68FktT7DogKzhfg6k=
+  app: kitbagapi
+  domain: riggerthegeek
+  on:
+#    all_branches: true
+    repo: riggerthegeek/kitbag-api
+#    tags: true
