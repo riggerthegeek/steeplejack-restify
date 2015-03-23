@@ -1,6 +1,6 @@
 {
   "name": "steeplejack-restify",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Restify implementation for steeplejack",
   "main": "./src/Restify",
   "dependencies": {
