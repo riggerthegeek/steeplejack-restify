@@ -32,7 +32,7 @@
     "semver": "~4.3.1",
     "sinon": "~1.14.0",
     "sinon-chai": "~2.7.0",
-    "steeplejack": "~0.4.0"
+    "steeplejack": "*"
   },
   "author": "Simon Emms <simon@simonemms.com>",
   "contributors": [
@@ -43,10 +43,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/riggerthegeek/steeplejack.git"
+    "url": "https://github.com/slash-dev-slash-null/steeplejack-restify.git"
   },
   "bugs": {
-    "url": "https://github.com/riggerthegeek/steeplejack/issues"
+    "url": "https://github.com/slash-dev-slash-null/steeplejack-restify/issues"
   },
   "licence": "MIT",
   "scripts": {
