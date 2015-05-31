@@ -4,7 +4,7 @@
   "description": "Restify implementation for steeplejack",
   "main": "./src/Restify",
   "dependencies": {
-    "lodash": "~3.5.0"
+    "lodash": "^3.9.3"
   },
   "peerDependencies": {
     "restify": "*",
