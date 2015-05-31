@@ -6,6 +6,7 @@ node_js:
 - iojs
 matrix:
   fast_finish: true
+cache: false
 before_install:
 - npm install -g grunt-cli
 script:
