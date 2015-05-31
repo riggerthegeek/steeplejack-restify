@@ -48,7 +48,7 @@
   "bugs": {
     "url": "https://github.com/slash-dev-slash-null/steeplejack-restify/issues"
   },
-  "licence": "MIT",
+  "license": "MIT",
   "scripts": {
     "test": "grunt watchtest"
   }
