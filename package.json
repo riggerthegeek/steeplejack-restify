@@ -8,7 +8,7 @@
   },
   "peerDependencies": {
     "restify": "*",
-    "steeplejack": ">=0.4.0"
+    "steeplejack": "*"
   },
   "devDependencies": {
     "chai": "~2.1.1",
