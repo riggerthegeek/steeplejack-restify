@@ -26,8 +26,8 @@ util.inherits(ApplicationError, steeplejack.Exceptions.Fatal);
 
 ApplicationError.prototype.getDetail = function () {
     return {
-        type: this.getType(),
-        message: this.getMessage()
+        type: this.type,
+        message: this.message
     };
 };
 

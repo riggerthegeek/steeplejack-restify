@@ -27,8 +27,8 @@ util.inherits(ValidationError, steeplejack.Exceptions.Validation);
 
 ValidationError.prototype.getDetail = function () {
     var err = {
-        type: this.getType(),
-        message: this.getMessage()
+        type: this.type,
+        message: this.message
     };
     if (this.hasErrors()) {
         err.error = this.getErrors();
