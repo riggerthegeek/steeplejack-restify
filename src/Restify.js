@@ -234,8 +234,8 @@ module.exports = Server.extend({
                 /* A steeplejack validation error */
                 statusCode = 400;
                 output = {
-                    code: err.getType(),
-                    message: err.getMessage()
+                    code: err.type,
+                    message: err.message
                 };
 
                 if (err.hasErrors()) {
