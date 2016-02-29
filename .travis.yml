@@ -1,16 +1,19 @@
 language: node_js
 node_js:
+- 'node'
+- '4.3'
+- 'iojs'
 - '0.12'
-- '0.11'
 - '0.10'
-- iojs
 matrix:
   fast_finish: true
+sudo: false
 before_install:
 - npm install -g grunt-cli
 script:
 - grunt ci
-- grunt coveralls:push
+before_deploy:
+- grunt
 deploy:
   provider: npm
   email: simon@simonemms.com
@@ -19,4 +22,4 @@ deploy:
   on:
     all_branches: true
     tags: true
-    repo: slash-dev-slash-null/steeplejack-restify
+    repo: riggerthegeek/steeplejack-restify
