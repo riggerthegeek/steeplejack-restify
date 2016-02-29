@@ -4,10 +4,10 @@
   "description": "Restify implementation for Steeplejack",
   "main": "./index",
   "scripts": {
-    "build": "npm run clean && tsc index.ts interfaces/*.ts",
+    "build": "npm run clean && tsc --declaration --sourceMap typings/main.d.ts index.ts interfaces/*.ts",
     "buildAll": "rm -Rf ./tmp && tsc --outDir ./tmp --sourceMap index.ts interfaces/*.ts test/*.ts",
     "ci": "npm test && npm run coverage",
-    "clean": "rm -Rf index.js interfaces/*.js",
+    "clean": "rm -Rf index.js interfaces/*.js index.d.ts interfaces/*.d.ts",
     "coverage": "npm run buildAll && rm -Rf ./coverage && istanbul cover _mocha ./tmp/test/ -- --recursive ./tmp/test && remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov-report -t html&& remap-istanbul -i ./coverage/coverage.json -o ./coverage/coverage.json  && istanbul check-coverage ./coverage/coverage.json --statements=100 --functions=100 --branches=100 --lines=100",
     "lint": "tslint *.ts **/*.ts",
     "mocha": "mocha --require ts-node/register test/**/*.ts",
@@ -31,7 +31,8 @@
   },
   "homepage": "https://github.com/riggerthegeek/steeplejack-restify#readme",
   "dependencies": {
-    "es6-promise": "^3.1.2"
+    "es6-promise": "^3.1.2",
+    "lodash": "^4.5.1"
   },
   "peerDependencies": {
     "steeplejack": "^2.0.0-2"

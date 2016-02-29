@@ -11,7 +11,7 @@ sudo: false
 before_install:
 - npm install -g grunt-cli
 script:
-- grunt ci
+- npm run ci
 before_deploy:
 - grunt
 deploy:
