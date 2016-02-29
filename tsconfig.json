@@ -1,11 +1,24 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": false,
-        "sourceMap": false
-    },
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "declaration": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "classic",
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "exclude": [
+    "coverage",
+    "node_modules",
+    "test",
+    "tmp",
+    "typings"
+  ],
+  "files": [
+    "./typings/main.d.ts"
+  ]
 }
