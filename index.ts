@@ -12,6 +12,7 @@ import {EventEmitter} from "events";
 
 
 /* Third-party modules */
+import * as _ from "lodash";
 import {IServerStrategy} from "steeplejack/interfaces/serverStrategy";
 import {Promise} from "es6-promise";
 let restify = require("restify");
@@ -98,7 +99,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
                 }
 
                 /* Uh-oh - haven't matched the accept type */
-                let err = new restify.NotAcceptableError(`Server accepts: ${options.join()}`);
+                let err = new restify.WrongAcceptError(`Server accepts: ${options.join()}`);
 
                 res.json(err);
                 cb(false);
@@ -197,7 +198,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {string[]} origins
      * @param {string[]} addHeaders
      */
-    enableCORS (origins: string[], addHeaders: string[]) {
+    enableCORS (origins: string[], addHeaders: string[] = []) {
 
         if (_.isArray(addHeaders)) {
             _.each(addHeaders, (header: string) => {
@@ -206,7 +207,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
         }
 
         this.use(restify.CORS({
-            origins: origins
+            origins
         }));
 
     }
@@ -292,6 +293,9 @@ export class Restify extends EventEmitter implements IServerStrategy {
                 output = _.isFunction(err.getDetail) ? err.getDetail() : err.message;
 
             }
+
+            /* Emit the error */
+            this.emit("output_error", err);
 
         } else if (data) {
 
