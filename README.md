@@ -5,7 +5,6 @@
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Node.js Version][node-version-image]][node-version-url]
 [![Build Status][travis-image]][travis-url]
-[![Code Quality][quality-image]][quality-url]
 [![Dependencies][dependencies-image]][dependencies-url]
 [![Dev Depedencies][dev-dependencies-image]][dev-dependencies-url]
 
@@ -22,7 +21,6 @@ MIT License
 [dependencies-image]: https://img.shields.io/david/riggerthegeek/steeplejack-restify.svg?style=flat
 [dev-dependencies-image]: https://img.shields.io/david/dev/riggerthegeek/steeplejack-restify.svg?style=flat
 [gitter-image]: https://img.shields.io/badge/GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat
-[quality-image]: http://img.shields.io/codeclimate/github/riggerthegeek/steeplejack-restify.svg?style=flat
 
 [npm-url]: https://npmjs.org/package/steeplejack-restify
 [node-version-url]: http://nodejs.org/download/
@@ -31,4 +29,3 @@ MIT License
 [dependencies-url]: https://david-dm.org/riggerthegeek/steeplejack-restify
 [dev-dependencies-url]: https://david-dm.org/riggerthegeek/steeplejack-restify#info=devDependencies&view=table
 [gitter-url]: https://gitter.im/riggerthegeek/steeplejack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge
-[quality-url]: https://codeclimate.com/github/riggerthegeek/steeplejack-restify
