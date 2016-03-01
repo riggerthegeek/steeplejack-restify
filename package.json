@@ -11,7 +11,9 @@
     "coverage": "npm run buildAll && rm -Rf ./coverage && istanbul cover _mocha ./tmp/test/ -- --recursive ./tmp/test && remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov-report -t html&& remap-istanbul -i ./coverage/coverage.json -o ./coverage/coverage.json  && istanbul check-coverage ./coverage/coverage.json --statements=100 --functions=100 --branches=100 --lines=100",
     "lint": "tslint *.ts interfaces/*.ts",
     "mocha": "npm run buildAll && mocha --recursive tmp/test",
+    "postversion": "git push && git push --tags",
     "test": "npm run lint && npm run mocha",
+    "postinstall": "typings install",
     "watch:coverage": "onchange 'src/**/*' 'test/**/*' -- npm run coverage",
     "watch:test": "onchange 'src/**/*' 'test/**/*' -- npm test"
   },
