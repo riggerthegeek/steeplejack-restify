@@ -10,7 +10,7 @@
     "clean": "rm -Rf index.js interfaces/*.js index.js.map interfaces/*.js.map index.d.ts interfaces/*.d.ts tmp coverage",
     "coverage": "npm run buildAll && rm -Rf ./coverage && istanbul cover _mocha ./tmp/test/ -- --recursive ./tmp/test && remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov-report -t html&& remap-istanbul -i ./coverage/coverage.json -o ./coverage/coverage.json  && istanbul check-coverage ./coverage/coverage.json --statements=100 --functions=100 --branches=100 --lines=100",
     "lint": "tslint *.ts interfaces/*.ts",
-    "mocha": "mocha --require ts-node/register test/**/*.ts",
+    "mocha": "npm run buildAll && mocha --recursive tmp/test",
     "test": "npm run lint && npm run mocha",
     "watch:coverage": "onchange 'src/**/*' 'test/**/*' -- npm run coverage",
     "watch:test": "onchange 'src/**/*' 'test/**/*' -- npm test"
@@ -49,7 +49,6 @@
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "steeplejack": "^2.0.0-2",
-    "ts-node": "^0.5.5",
     "tslint": "^3.5.0",
     "typescript": "^1.8.2",
     "typings": "^0.6.8"
