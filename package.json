@@ -5,9 +5,9 @@
   "main": "./index",
   "scripts": {
     "build": "npm run clean && tsc --declaration --sourceMap typings/main.d.ts index.ts interfaces/*.ts",
-    "buildAll": "rm -Rf ./tmp && tsc --outDir ./tmp --sourceMap index.ts interfaces/*.ts test/*.ts",
+    "buildAll": "npm run clean && tsc --outDir ./tmp --sourceMap index.ts interfaces/*.ts test/*.ts",
     "ci": "npm test && npm run coverage",
-    "clean": "rm -Rf index.js interfaces/*.js index.d.ts interfaces/*.d.ts",
+    "clean": "rm -Rf index.js interfaces/*.js index.js.map interfaces/*.js.map index.d.ts interfaces/*.d.ts tmp coverage",
     "coverage": "npm run buildAll && rm -Rf ./coverage && istanbul cover _mocha ./tmp/test/ -- --recursive ./tmp/test && remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov-report -t html&& remap-istanbul -i ./coverage/coverage.json -o ./coverage/coverage.json  && istanbul check-coverage ./coverage/coverage.json --statements=100 --functions=100 --branches=100 --lines=100",
     "lint": "tslint *.ts **/*.ts",
     "mocha": "mocha --require ts-node/register test/**/*.ts",
