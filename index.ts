@@ -1,7 +1,8 @@
 /**
  * Restify
  *
- *
+ * This is a strategy pattern for Restify for
+ * use with the Steeplejack Server class.
  */
 
 "use strict";
@@ -293,9 +294,6 @@ export class Restify extends EventEmitter implements IServerStrategy {
                 output = _.isFunction(err.getDetail) ? err.getDetail() : err.message;
 
             }
-
-            /* Emit the error */
-            this.emit("output_error", err);
 
         } else if (data) {
 

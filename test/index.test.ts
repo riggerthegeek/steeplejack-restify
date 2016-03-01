@@ -687,15 +687,9 @@ describe("index test", function () {
 
             });
 
-            it("should simulate a restify error", function (done: any) {
+            it("should simulate a restify error", function () {
 
                 let err = new restify.WrongAcceptError("message");
-
-                obj.on("output_error", function (error) {
-                    expect(error).to.be.equal(err);
-
-                    done();
-                });
 
                 obj.outputHandler(err, {}, req, res);
 
@@ -704,15 +698,9 @@ describe("index test", function () {
 
             });
 
-            it("should simulate a steeplejack error", function (done) {
+            it("should simulate a steeplejack error", function () {
 
                 let err = new ApplicationException("message");
-
-                obj.on("output_error", function (error) {
-                    expect(error).to.be.equal(err);
-
-                    done();
-                });
 
                 obj.outputHandler(err, {}, req, res);
 
@@ -721,15 +709,9 @@ describe("index test", function () {
 
             });
 
-            it("should simulate a steeplejack validation error", function (done) {
+            it("should simulate a steeplejack validation error", function () {
 
                 let err = new ValidationException("message2");
-
-                obj.on("output_error", function (error) {
-                    expect(error).to.be.equal(err);
-
-                    done();
-                });
 
                 obj.outputHandler(err, {}, req, res);
 
@@ -741,17 +723,11 @@ describe("index test", function () {
 
             });
 
-            it("should simulate a steeplejack validation error with an error", function (done) {
+            it("should simulate a steeplejack validation error with an error", function () {
 
                 let err = new ValidationException("message");
 
                 err.addError("key", "value", "message");
-
-                obj.on("output_error", function (error) {
-                    expect(error).to.be.equal(err);
-
-                    done();
-                });
 
                 obj.outputHandler(err, {}, req, res);
 
@@ -769,15 +745,9 @@ describe("index test", function () {
 
             });
 
-            it("should simulate an Error", function (done) {
+            it("should simulate an Error", function () {
 
                 let err = new Error("message");
-
-                obj.on("output_error", function (error) {
-                    expect(error).to.be.equal(err);
-
-                    done();
-                });
 
                 obj.outputHandler(err, {}, req, res);
 
