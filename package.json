@@ -12,7 +12,8 @@
     "lint": "tslint *.ts **/*.ts",
     "mocha": "mocha --require ts-node/register test/**/*.ts",
     "test": "npm run lint && npm run mocha",
-    "watch:mocha": "mocha --watch --watch-extensions ts --require ts-node/register test/**/*.ts"
+    "watch:coverage": "onchange 'src/**/*' 'test/**/*' -- npm run coverage",
+    "watch:test": "onchange 'src/**/*' 'test/**/*' -- npm test"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "chai": "^3.5.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
+    "onchange": "^2.0.0",
     "proxyquire": "^1.7.4",
     "remap-istanbul": "^0.5.1",
     "sinon": "^1.17.3",
