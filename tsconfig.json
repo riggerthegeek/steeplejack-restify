@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "experimentalDecorators": true,
     "module": "commonjs",
     "moduleResolution": "classic",
     "noImplicitAny": true,
