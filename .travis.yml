@@ -10,7 +10,7 @@ sudo: false
 script:
 - npm run ci
 before_deploy:
-- grunt
+- npm run build
 deploy:
   provider: npm
   email: simon@simonemms.com
