@@ -4,7 +4,6 @@ node_js:
 - '4.3'
 - 'iojs'
 - '0.12'
-- '0.10'
 matrix:
   fast_finish: true
 sudo: false
