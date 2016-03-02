@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-- 'node'
+- node
 - '4.3'
-- 'iojs'
+- iojs
 - '0.12'
 matrix:
   fast_finish: true
@@ -15,7 +15,7 @@ deploy:
   provider: npm
   email: simon@simonemms.com
   api_key:
-    secure: Tpz/DnfESujPs5FCOY9EVO7fXDQC/gxPWlOu5NJmFn4DQ721EiulEXhEX+7tgBCkrI1IBr8XbIR58ZmcXc3SOH2UEPit+S3f/J2Hxy5Xd/wXMmIdBNKPwN/Ac3KuJIzZ6283k57DRH3MInWRbZDPssT4rMqKwqViwGaDPWToVgE=
+    secure: RHyokQCoy8y2zg8Wxhd1oYG24SioH2gm21k12N9Evj2W/pGmsgX054Cv+i6bAh4fCBn3mZZ6oTEtHrVcERNVkSwVWck+3/vOg4960kYF0E0hrDpxd7KXp5RrzKzyRkk9kMm+yxlrwyDRJoVD//1yph1JPZnBgSoVfHkoKj0zxRs=
   on:
     all_branches: true
     tags: true
