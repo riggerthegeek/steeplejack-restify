@@ -46,7 +46,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {IRestifyOpts} opts
      */
-    constructor (opts: IRestifyOpts = {}) {
+    public constructor (opts: IRestifyOpts = {}) {
 
         super();
 
@@ -65,6 +65,81 @@ export class Restify extends EventEmitter implements IServerStrategy {
     }
 
 
+    protected _parseData (data: any) {
+
+        let statusCode: Number = 200;
+        let output: any;
+
+        /* Some data to display */
+        if (_.isObject(data) && _.isFunction(data.getData)) {
+            /* Get the data from a function */
+            output = data.getData();
+        } else {
+            /* Just output the data */
+            output = data;
+        }
+
+        return {
+            statusCode,
+            output
+        };
+
+    }
+
+
+    /**
+     * Parse Error
+     *
+     * Parses the error output
+     *
+     * @param {*} err
+     * @returns {{statusCode: Number, output: any}}
+     * @private
+     */
+    protected _parseError (err: any) {
+
+        let statusCode: Number = 500;
+        let output: any;
+
+        /* Error - present an appropriate error message */
+        if (err instanceof restify.RestError) {
+
+            /* Already a RestError - use it */
+            statusCode = err.statusCode;
+            output = err;
+
+        } else if (err instanceof ValidationException) {
+
+            /* A steeplejack validation error */
+            statusCode = 400;
+            output = {
+                code: err.type,
+                message: err.message
+            };
+
+            if (err.hasErrors()) {
+                output.error = err.getErrors();
+            }
+
+        } else {
+
+            /* Convert to a restify-friendly error */
+            if (_.isFunction(err.getHttpCode)) {
+                statusCode = err.getHttpCode();
+            }
+
+            output = _.isFunction(err.getDetail) ? err.getDetail() : err.message;
+
+        }
+
+        return {
+            statusCode,
+            output
+        };
+
+    }
+
+
     /**
      * Accept Parser
      *
@@ -78,7 +153,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {string[]} options
      * @param {boolean} strict
      */
-    acceptParser (options: string[] = null, strict: boolean = false) {
+    public acceptParser (options: string[] = null, strict: boolean = false) {
 
         if (!options) {
             options = this.getServer().acceptable;
@@ -123,7 +198,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {string} route
      * @param {Function|Function[]} fn
      */
-    addRoute (httpMethod: string, route: string, fn: Function | Function[]) {
+    public addRoute (httpMethod: string, route: string, fn: Function | Function[]) {
 
         /* Ensure the httpMethod set to lowercase */
         httpMethod = httpMethod.toLowerCase();
@@ -142,7 +217,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {Function} fn
      */
-    after (fn: Function) {
+    public after (fn: Function) {
 
         this.getServer().on("after", fn);
 
@@ -157,7 +232,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {Function} fn
      */
-    before (fn: Function) {
+    public before (fn: Function) {
 
         this.getServer().pre(fn);
 
@@ -169,7 +244,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * Allows the server to receive the HTTP body.
      */
-    bodyParser () {
+    public bodyParser () {
 
         this.use(restify.bodyParser());
 
@@ -181,7 +256,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * Closes the server.
      */
-    close () {
+    public close () {
 
         this.getServer().close();
 
@@ -199,7 +274,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {string[]} origins
      * @param {string[]} addHeaders
      */
-    enableCORS (origins: string[], addHeaders: string[] = []) {
+    public enableCORS (origins: string[], addHeaders: string[] = []) {
 
         if (_.isArray(addHeaders)) {
             _.each(addHeaders, (header: string) => {
@@ -221,7 +296,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @returns {object}
      */
-    getServer () {
+    public getServer () {
         return this._inst;
     }
 
@@ -233,7 +308,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @returns {object}
      */
-    getSocketServer () {
+    public getSocketServer () {
         return this.getServer().server;
     }
 
@@ -243,7 +318,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * Sets the response to be GZIP compressed
      */
-    gzipResponse () {
+    public gzipResponse () {
         this.use(restify.gzipResponse());
     }
 
@@ -260,57 +335,15 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {object} request
      * @param {object} result
      */
-    outputHandler (err: any, data: any, request: any, result: any) {
+    public outputHandler (err: any, data: any, request: any, result: any) {
 
-        let statusCode: Number = 200;
+        let statusCode: Number = 204;
         let output: any;
 
         if (err) {
-
-            /* Error - present an appropriate error message */
-            if (err instanceof restify.RestError) {
-
-                /* Already a RestError - use it */
-                statusCode = err.statusCode;
-                output = err;
-
-            } else if (err instanceof ValidationException) {
-
-                /* A steeplejack validation error */
-                statusCode = 400;
-                output = {
-                    code: err.type,
-                    message: err.message
-                };
-
-                if (err.hasErrors()) {
-                    output.error = err.getErrors();
-                }
-
-            } else {
-
-                /* Convert to a restify-friendly error */
-                statusCode = _.isFunction(err.getHttpCode) ? err.getHttpCode() : 500;
-                output = _.isFunction(err.getDetail) ? err.getDetail() : err.message;
-
-            }
-
+            ({ statusCode, output } = this._parseError(err));
         } else if (data) {
-
-            /* Some data to display */
-            if (_.isObject(data) && _.isFunction(data.getData)) {
-                /* Get the data from a function */
-                output = data.getData();
-            } else {
-                /* Just output the data */
-                output = data;
-            }
-
-        } else {
-
-            /* No data */
-            statusCode = 204;
-
+            ({ statusCode, output } = this._parseData(data));
         }
 
         /* Display the output */
@@ -329,7 +362,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {boolean} mapParams
      */
-    queryParser (mapParams: boolean = false) {
+    public queryParser (mapParams: boolean = false) {
 
         this.use(restify.queryParser({
             mapParams
@@ -349,7 +382,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {number} backlog
      * @returns {"es6-promise/dist/es6-promise".Promise}
      */
-    start (port: number, hostname: string, backlog: number) : Promise<any> {
+    public start (port: number, hostname: string, backlog: number) : Promise<any> {
 
         return new Promise((resolve: Function, reject: Function) => {
 
@@ -376,7 +409,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {Function} fn
      */
-    uncaughtException (fn: Function) {
+    public uncaughtException (fn: Function) {
 
         this.getServer().on("uncaughtException", fn);
 
@@ -391,7 +424,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {Function} fn
      */
-    use (fn: Function | Function[]) {
+    public use (fn: Function | Function[]) {
 
         this.getServer().use(fn);
 
