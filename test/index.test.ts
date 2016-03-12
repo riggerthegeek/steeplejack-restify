@@ -863,35 +863,23 @@ describe("index test", function () {
 
             it("should simulate a status code sent as an error", function () {
 
-                this.timeout(5000);
-
                 let x = 1;
 
-                for (let code = 100; code < 600; code++) {
+                obj.outputHandler(401, {}, req, res);
 
-                    obj.outputHandler(code, {}, req, res);
-
-                    expect(res.send).to.be.callCount(x++)
-                        .calledWithExactly(code, void 0);
-
-                }
+                expect(res.send).to.be.callCount(x++)
+                    .calledWithExactly(401, void 0);
 
             });
 
             it("should simulate a status code sent as data", function () {
 
-                this.timeout(5000);
-
                 let x = 1;
 
-                for (let code = 100; code < 600; code++) {
+                obj.outputHandler(null, 204, req, res);
 
-                    obj.outputHandler(null, code, req, res);
-
-                    expect(res.send).to.be.callCount(x++)
-                        .calledWithExactly(code, void 0);
-
-                }
+                expect(res.send).to.be.callCount(x++)
+                    .calledWithExactly(204, void 0);
 
             });
 
