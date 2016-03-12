@@ -65,13 +65,27 @@ export class Restify extends EventEmitter implements IServerStrategy {
     }
 
 
+    /**
+     * Parse Data
+     *
+     * Parses the data output
+     *
+     * @param {*} data
+     * @returns {{statusCode: Number, output: any}}
+     * @private
+     */
     protected _parseData (data: any) {
 
         let statusCode: Number = 200;
         let output: any;
 
         /* Some data to display */
-        if (_.isObject(data) && _.isFunction(data.getData)) {
+        if (data >= 100 && data < 600) {
+
+            /* HTTP status code */
+            statusCode = data;
+
+        } else if (_.isObject(data) && _.isFunction(data.getData)) {
             /* Get the data from a function */
             output = data.getData();
         } else {
@@ -101,8 +115,13 @@ export class Restify extends EventEmitter implements IServerStrategy {
         let statusCode: Number = 500;
         let output: any;
 
-        /* Error - present an appropriate error message */
-        if (err instanceof restify.RestError) {
+        /* Work out the appropriate error message */
+        if (err >= 100 && err < 600) {
+
+            /* HTTP status code */
+            statusCode = err;
+
+        } else if (err instanceof restify.RestError) {
 
             /* Already a RestError - use it */
             statusCode = err.statusCode;
@@ -198,14 +217,41 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {string} route
      * @param {Function|Function[]} fn
      */
-    public addRoute (httpMethod: string, route: string, fn: Function | Function[]) {
+    public addRoute (httpMethod: string, route: string, fn: Function[]) {
 
         /* Ensure the httpMethod set to lowercase */
         httpMethod = httpMethod.toLowerCase();
 
         let server = this.getServer();
 
-        server[httpMethod](route, fn);
+        server[httpMethod](route, (request: Object, response: Object, next: Function) => {
+
+            let tasks: Promise<any>[] = _.map(fn, (task: Function) => {
+
+                return new Promise((resolve) => {
+
+                    let result = task({
+                        request,
+                        response
+                    });
+
+                    resolve(result);
+
+                });
+
+            });
+
+            return Promise.all(tasks)
+                .then((result: any) => {
+                    this.outputHandler(null, _.last(result), request, response);
+                    next();
+                })
+                .catch((err: any) => {
+                    this.outputHandler(err, null, request, response);
+                    next(err);
+                });
+
+        });
 
     }
 
