@@ -230,11 +230,10 @@ export class Restify extends EventEmitter implements IServerStrategy {
 
                 return new Promise((resolve) => {
 
-                    let result = task({
-                        request,
-                        response
-                    });
+                    /* Invoke the function */
+                    let result = task(request, response);
 
+                    /* Resolve the result */
                     resolve(result);
 
                 });

@@ -326,7 +326,10 @@ describe("index test", function () {
                 it("should add to the function with a lower case method", function (done:any) {
 
                     let fn = [
-                        () => {
+                        (req, res) => {
+                            expect(req).to.be.equal(this.req);
+                            expect(res).to.be.equal(this.res);
+
                             return "my result";
                         }
                     ];
@@ -361,7 +364,10 @@ describe("index test", function () {
                 it("should return a promise", function (done:any) {
 
                     let fn = [
-                        () => {
+                        (req, res) => {
+                            expect(req).to.be.equal(this.req);
+                            expect(res).to.be.equal(this.res);
+
                             return new Promise((resolve:any) => {
                                 setTimeout(() => {
                                     resolve("my result");
@@ -400,7 +406,10 @@ describe("index test", function () {
                 it("should add to the function with an upper case method", function (done:any) {
 
                     let fn = [
-                        () => {
+                        (req, res) => {
+                            expect(req).to.be.equal(this.req);
+                            expect(res).to.be.equal(this.res);
+
                             return "my result";
                         }
                     ];
@@ -439,7 +448,11 @@ describe("index test", function () {
                 it("should throw an error", function (done: any) {
 
                     let fn = [
-                        () => {
+                        (req, res) => {
+
+                            expect(req).to.be.equal(this.req);
+                            expect(res).to.be.equal(this.res);
+
                             throw new Error("uh oh");
                         }
                     ];
@@ -474,7 +487,10 @@ describe("index test", function () {
                 it("should reject an error", function (done: any) {
 
                     let fn = [
-                        () => {
+                        (req, res) => {
+                            expect(req).to.be.equal(this.req);
+                            expect(res).to.be.equal(this.res);
+
                             return new Promise((resolve: any, reject: any) => {
                                 setTimeout(() => {
                                     reject(new Error("uh oh"));
