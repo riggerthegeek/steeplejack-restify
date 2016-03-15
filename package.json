@@ -25,7 +25,7 @@
     "steeplejack",
     "steeplejack-plugin",
     "restify",
-    "db-strategy"
+    "server-strategy"
   ],
   "author": "Simon Emms <simon@simonemms.com>",
   "license": "MIT",
