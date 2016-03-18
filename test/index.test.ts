@@ -9,7 +9,6 @@
 
 /* Node modules */
 import {EventEmitter} from "events";
-import {Promise} from "es6-promise";
 
 
 /* Third-party modules */
@@ -17,6 +16,7 @@ import * as chai from "chai";
 import * as proxyquire from "proxyquire";
 let restify = require("restify");
 import * as sinon from "sinon";
+import {Promise} from "es6-promise";
 import sinonChai = require("sinon-chai");
 import {Collection} from "steeplejack/lib/collection";
 import {Model} from "steeplejack/lib/model";
@@ -321,210 +321,109 @@ describe("index test", function () {
 
             });
 
-            describe("valid output", function () {
+            it("should add to the function with a lower case method", function (done:any) {
 
-                it("should add to the function with a lower case method", function (done:any) {
+                let result = (req, res) => {
+                    expect(req).to.be.equal(this.req);
+                    expect(res).to.be.equal(this.res);
 
-                    let fn = [
-                        (req, res) => {
-                            expect(req).to.be.equal(this.req);
-                            expect(res).to.be.equal(this.res);
+                    return Promise.resolve("my result");
+                };
 
-                            return "my result";
-                        }
-                    ];
+                this.server.get = (route: string, iterator: any) => {
 
-                    this.server.get = (route:string, cb:any) => {
+                    expect(route).to.be.equal("/path/to/route");
 
-                        expect(route).to.be.equal("/path/to/route");
+                    iterator(this.req, this.res, this.next)
+                        .then((result) => {
 
-                        cb(this.req, this.res, this.next)
-                            .then(() => {
+                            expect(result).to.be.undefined;
 
-                                expect(this.outputHandler).to.be.calledOnce
-                                    .calledWithExactly(null, "my result", this.req, this.res);
+                            expect(this.next).to.be.calledOnce
+                                .calledWithExactly();
 
-                                expect(this.next).to.be.calledOnce
-                                    .calledWithExactly();
+                            done();
 
-                                done();
+                        });
 
-                            });
+                };
 
+                this.stub = sinon.stub(this.obj, "getServer")
+                    .returns(this.server);
 
-                    };
-
-                    this.stub = sinon.stub(this.obj, "getServer")
-                        .returns(this.server);
-
-                    expect(this.obj.addRoute("get", "/path/to/route", fn)).to.be.undefined;
-
-                });
-
-                it("should return a promise", function (done:any) {
-
-                    let fn = [
-                        (req, res) => {
-                            expect(req).to.be.equal(this.req);
-                            expect(res).to.be.equal(this.res);
-
-                            return new Promise((resolve:any) => {
-                                setTimeout(() => {
-                                    resolve("my result");
-                                }, 500);
-                            });
-                        }
-                    ];
-
-                    this.server.get = (route:string, cb:any) => {
-
-                        expect(route).to.be.equal("/path/to/route");
-
-                        cb(this.req, this.res, this.next)
-                            .then(() => {
-
-                                expect(this.outputHandler).to.be.calledOnce
-                                    .calledWithExactly(null, "my result", this.req, this.res);
-
-                                expect(this.next).to.be.calledOnce
-                                    .calledWithExactly();
-
-                                done();
-
-                            });
-
-
-                    };
-
-                    this.stub = sinon.stub(this.obj, "getServer")
-                        .returns(this.server);
-
-                    expect(this.obj.addRoute("get", "/path/to/route", fn)).to.be.undefined;
-
-                });
-
-                it("should add to the function with an upper case method", function (done:any) {
-
-                    let fn = [
-                        (req, res) => {
-                            expect(req).to.be.equal(this.req);
-                            expect(res).to.be.equal(this.res);
-
-                            return "my result";
-                        }
-                    ];
-
-                    this.server.get = (route:string, cb:any) => {
-
-                        expect(route).to.be.equal("/path/to/route");
-
-                        cb(this.req, this.res, this.next)
-                            .then(() => {
-
-                                expect(this.outputHandler).to.be.calledOnce
-                                    .calledWithExactly(null, "my result", this.req, this.res);
-
-                                expect(this.next).to.be.calledOnce
-                                    .calledWithExactly();
-
-                                done();
-
-                            });
-
-
-                    };
-
-                    this.stub = sinon.stub(this.obj, "getServer")
-                        .returns(this.server);
-
-                    expect(this.obj.addRoute("GET", "/path/to/route", fn)).to.be.undefined;
-
-                });
+                expect(this.obj.addRoute("get", "/path/to/route", result)).to.be.undefined;
 
             });
 
-            describe("invalid output", function () {
+            it("should add to the function with an upper case method", function (done:any) {
 
-                it("should throw an error", function (done: any) {
+                let result = (req, res) => {
+                    expect(req).to.be.equal(this.req);
+                    expect(res).to.be.equal(this.res);
 
-                    let fn = [
-                        (req, res) => {
+                    return Promise.resolve("my result");
+                };
 
-                            expect(req).to.be.equal(this.req);
-                            expect(res).to.be.equal(this.res);
+                this.server.get = (route: string, iterator: any) => {
 
-                            throw new Error("uh oh");
-                        }
-                    ];
+                    expect(route).to.be.equal("/path/to/route");
 
-                    this.server.get = (route: string, cb: any) => {
+                    iterator(this.req, this.res, this.next)
+                        .then((result) => {
 
-                        expect(route).to.be.equal("/path/to/route");
+                            expect(result).to.be.undefined;
 
-                        cb(this.req, this.res, this.next)
-                            .then(() => {
+                            expect(this.next).to.be.calledOnce
+                                .calledWithExactly();
 
-                                expect(this.outputHandler).to.be.calledOnce
-                                    .calledWithExactly(new Error("uh oh"), null, this.req, this.res);
+                            done();
 
-                                expect(this.next).to.be.calledOnce
-                                    .calledWithExactly(new Error("uh oh"));
+                        });
 
-                                done();
+                };
 
-                            });
+                this.stub = sinon.stub(this.obj, "getServer")
+                    .returns(this.server);
 
+                expect(this.obj.addRoute("GET", "/path/to/route", result)).to.be.undefined;
 
-                    };
+            });
 
-                    this.stub = sinon.stub(this.obj, "getServer")
-                        .returns(this.server);
+            it("should reject the function", function (done:any) {
 
-                    expect(this.obj.addRoute("get", "/path/to/route", fn)).to.be.undefined;
+                let result = (req, res) => {
+                    expect(req).to.be.equal(this.req);
+                    expect(res).to.be.equal(this.res);
 
-                });
+                    return Promise.reject(new Error("my error"));
+                };
 
-                it("should reject an error", function (done: any) {
+                this.server.get = (route: string, iterator: any) => {
 
-                    let fn = [
-                        (req, res) => {
-                            expect(req).to.be.equal(this.req);
-                            expect(res).to.be.equal(this.res);
+                    expect(route).to.be.equal("/path/to/route");
 
-                            return new Promise((resolve: any, reject: any) => {
-                                setTimeout(() => {
-                                    reject(new Error("uh oh"));
-                                }, 500);
-                            });
-                        }
-                    ];
+                    iterator(this.req, this.res, this.next)
+                        .then(() => {
+                            throw new Error("invalid");
+                        })
+                        .catch((err: any) => {
 
-                    this.server.get = (route: string, cb: any) => {
+                            expect(err).to.be.instanceof(Error);
+                            expect(err.message).to.be.equal("my error");
 
-                        expect(route).to.be.equal("/path/to/route");
+                            expect(this.next).to.be.calledOnce
+                                .calledWithExactly(err);
 
-                        cb(this.req, this.res, this.next)
-                            .then(() => {
+                            done();
 
-                                expect(this.outputHandler).to.be.calledOnce
-                                    .calledWithExactly(new Error("uh oh"), null, this.req, this.res);
+                        });
 
-                                expect(this.next).to.be.calledOnce
-                                    .calledWithExactly(new Error("uh oh"));
+                };
 
-                                done();
+                this.stub = sinon.stub(this.obj, "getServer")
+                    .returns(this.server);
 
-                            });
-
-
-                    };
-
-                    this.stub = sinon.stub(this.obj, "getServer")
-                        .returns(this.server);
-
-                    expect(this.obj.addRoute("get", "/path/to/route", fn)).to.be.undefined;
-
-                });
+                expect(this.obj.addRoute("GET", "/path/to/route", result)).to.be.undefined;
 
             });
 
@@ -764,207 +663,16 @@ describe("index test", function () {
 
             });
 
-            it("should simulate no response sent", function () {
+            it("should call the response with the data and statusCode", function () {
 
-                [
-                    null,
-                    false,
-                    undefined
-                ].forEach((data: any, i: number) => {
+                let data = {
+                    hello: "world"
+                };
 
-                    obj.outputHandler(null, data, req, res);
-
-                    expect(res.send).to.be.callCount(i + 1)
-                        .calledWithExactly(204, undefined);
-
-                });
-
-            });
-
-            it("should simulate content sent as a steeplejack model", function () {
-
-                class Person extends Model {
-
-                    protected _schema () {
-
-                        return {
-                            name: {
-                                type: "string"
-                            }
-                        };
-
-                    }
-
-                }
-
-                let data = new Person({
-                    name: "Rhod"
-                });
-
-                obj.outputHandler(null, data, req, res);
+                expect(obj.outputHandler(201, data, req, res)).to.be.undefined;
 
                 expect(res.send).to.be.calledOnce
-                    .calledWithExactly(200, {
-                        name: "Rhod"
-                    });
-
-            });
-
-            it("should simulate content sent as a steeplejack collection", function () {
-
-                class Person extends Model {
-
-                    protected _schema () {
-
-                        return {
-                            name: {
-                                type: "string"
-                            }
-                        };
-
-                    }
-
-
-                }
-
-                class People extends Collection {
-
-                    protected _model () {
-                        return Person;
-                    }
-
-                }
-
-
-                let data = new People([{
-                    name: "Rhod"
-                }, {
-                    name: "Bob"
-                }]);
-
-                obj.outputHandler(null, data, req, res);
-
-                expect(res.send).to.be.calledOnce
-                    .calledWithExactly(200, [{
-                        name: "Rhod"
-                    }, {
-                        name: "Bob"
-                    }]);
-
-            });
-
-            it("should simulate content sent", function () {
-
-                [
-                    [],
-                    {},
-                    "string",
-                    {
-                        hello: "world"
-                    },
-                    [
-                        "hello",
-                        "world"
-                    ]
-                ].forEach((data: any, i: number) => {
-
-                    obj.outputHandler(null, data, req, res);
-
-                    expect(res.send).to.be.callCount(i + 1)
-                        .calledWithExactly(200, data);
-
-                });
-
-            });
-
-            it("should simulate a status code sent as an error", function () {
-
-                let x = 1;
-
-                obj.outputHandler(401, {}, req, res);
-
-                expect(res.send).to.be.callCount(x++)
-                    .calledWithExactly(401, void 0);
-
-            });
-
-            it("should simulate a status code sent as data", function () {
-
-                let x = 1;
-
-                obj.outputHandler(null, 204, req, res);
-
-                expect(res.send).to.be.callCount(x++)
-                    .calledWithExactly(204, void 0);
-
-            });
-
-            it("should simulate a restify error", function () {
-
-                let err = new restify.WrongAcceptError("message");
-
-                obj.outputHandler(err, {}, req, res);
-
-                expect(res.send).to.be.calledOnce
-                    .calledWithExactly(406, err);
-
-            });
-
-            it("should simulate a steeplejack error", function () {
-
-                let err = new ApplicationException("message");
-
-                obj.outputHandler(err, {}, req, res);
-
-                expect(res.send).to.be.calledOnce
-                    .calledWithExactly(err.getHttpCode(), err.getDetail());
-
-            });
-
-            it("should simulate a steeplejack validation error", function () {
-
-                let err = new ValidationException("message2");
-
-                obj.outputHandler(err, {}, req, res);
-
-                expect(res.send).to.be.calledOnce
-                    .calledWithExactly(400, {
-                        code: "VALIDATION",
-                        message: "message2"
-                    });
-
-            });
-
-            it("should simulate a steeplejack validation error with an error", function () {
-
-                let err = new ValidationException("message");
-
-                err.addError("key", "value", "message");
-
-                obj.outputHandler(err, {}, req, res);
-
-                expect(res.send).to.be.calledOnce
-                    .calledWithExactly(400, {
-                        code: "VALIDATION",
-                        message: "message",
-                        error: {
-                            key: [{
-                                message: "message",
-                                value: "value"
-                            }]
-                        }
-                    });
-
-            });
-
-            it("should simulate an Error", function () {
-
-                let err = new Error("message");
-
-                obj.outputHandler(err, {}, req, res);
-
-                expect(res.send).to.be.calledOnce
-                    .calledWithExactly(500, "message");
+                    .calledWithExactly(201, data);
 
             });
 

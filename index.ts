@@ -66,100 +66,6 @@ export class Restify extends EventEmitter implements IServerStrategy {
 
 
     /**
-     * Parse Data
-     *
-     * Parses the data output
-     *
-     * @param {*} data
-     * @returns {{statusCode: Number, output: any}}
-     * @private
-     */
-    protected _parseData (data: any) {
-
-        let statusCode: Number = 200;
-        let output: any;
-
-        /* Some data to display */
-        if (data >= 100 && data < 600) {
-
-            /* HTTP status code */
-            statusCode = data;
-
-        } else if (_.isObject(data) && _.isFunction(data.getData)) {
-            /* Get the data from a function */
-            output = data.getData();
-        } else {
-            /* Just output the data */
-            output = data;
-        }
-
-        return {
-            statusCode,
-            output
-        };
-
-    }
-
-
-    /**
-     * Parse Error
-     *
-     * Parses the error output
-     *
-     * @param {*} err
-     * @returns {{statusCode: Number, output: any}}
-     * @private
-     */
-    protected _parseError (err: any) {
-
-        let statusCode: Number = 500;
-        let output: any;
-
-        /* Work out the appropriate error message */
-        if (err >= 100 && err < 600) {
-
-            /* HTTP status code */
-            statusCode = err;
-
-        } else if (err instanceof restify.RestError) {
-
-            /* Already a RestError - use it */
-            statusCode = err.statusCode;
-            output = err;
-
-        } else if (err instanceof ValidationException) {
-
-            /* A steeplejack validation error */
-            statusCode = 400;
-            output = {
-                code: err.type,
-                message: err.message
-            };
-
-            if (err.hasErrors()) {
-                output.error = err.getErrors();
-            }
-
-        } else {
-
-            /* Convert to a restify-friendly error */
-            if (_.isFunction(err.getHttpCode)) {
-                statusCode = err.getHttpCode();
-            }
-
-            output = _.isFunction(err.getDetail) ? err.getDetail() : err.message;
-
-        }
-
-        return {
-            statusCode,
-            output
-        };
-
-    }
-
-
-    /**
      * Accept Parser
      *
      * Makes the server use the accept parser. If
@@ -215,41 +121,21 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {string} httpMethod
      * @param {string} route
-     * @param {Function|Function[]} fn
+     * @param {Function} iterator
      */
-    public addRoute (httpMethod: string, route: string, fn: Function[]) {
+    addRoute (httpMethod: string, route: string, iterator: (request: any, response: any) => Promise<any>) {
 
-        /* Ensure the httpMethod set to lowercase */
-        httpMethod = httpMethod.toLowerCase();
+        let method = httpMethod.toLowerCase();
 
-        let server = this.getServer();
-
-        server[httpMethod](route, (request: Object, response: Object, next: Function) => {
-
-            let tasks: Promise<any>[] = _.map(fn, (task: Function) => {
-
-                return new Promise((resolve) => {
-
-                    /* Invoke the function */
-                    let result = task(request, response);
-
-                    /* Resolve the result */
-                    resolve(result);
-
-                });
-
-            });
-
-            return Promise.all(tasks)
-                .then((result: any) => {
-                    this.outputHandler(null, _.last(result), request, response);
+        this.getServer()[method](route, (req: any, res: any, next: Function) => {
+            return iterator(req, res)
+                .then(() => {
                     next();
                 })
                 .catch((err: any) => {
-                    this.outputHandler(err, null, request, response);
                     next(err);
+                    throw err;
                 });
-
         });
 
     }
@@ -378,21 +264,12 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {*} err
      * @param {*} data
      * @param {object} request
-     * @param {object} result
+     * @param {object} response
      */
-    public outputHandler (err: any, data: any, request: any, result: any) {
-
-        let statusCode: Number = 204;
-        let output: any;
-
-        if (err) {
-            ({ statusCode, output } = this._parseError(err));
-        } else if (data) {
-            ({ statusCode, output } = this._parseData(data));
-        }
+    public outputHandler (statusCode: Number, output: any, request: any, response: any) {
 
         /* Display the output */
-        result.send(statusCode, output);
+        response.send(statusCode, output);
 
     }
 
