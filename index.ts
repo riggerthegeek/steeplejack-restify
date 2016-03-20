@@ -17,7 +17,6 @@ import * as _ from "lodash";
 import {IServerStrategy} from "steeplejack/interfaces/serverStrategy";
 import {Promise} from "es6-promise";
 let restify = require("restify");
-import {ValidationException} from "steeplejack/exception/validation/index";
 
 
 /* Files */
@@ -123,7 +122,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {string} route
      * @param {Function} iterator
      */
-    addRoute (httpMethod: string, route: string, iterator: (request: any, response: any) => Promise<any>) {
+    public addRoute (httpMethod: string, route: string, iterator: (request: any, response: any) => Promise<any>) {
 
         let method = httpMethod.toLowerCase();
 
