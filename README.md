@@ -10,6 +10,37 @@
 
 [Restify](http://restify.com) strategy for [Steeplejack](http://steeplejack.info)
 
+# Usage
+
+In your main [Steeplejack](http://steeplejack.info) `run` method, you will need to configure your Restify strategy
+like this...
+
+```javascript
+import {Restify} from "steeplejack-restify";
+import {Server} from "steeplejack/lib/server";
+
+app.run(($config) => {
+    let server = new Server($config.server, new Restify());
+
+    return server;
+});
+```
+
+This is the minimal config.  The `Restify` constructor accepts all the arguments that
+[createServer](http://restify.com/#creating-a-server) method does.
+
+| Option                 | Type         | Description                                                                                                                                                                                                                                                                                                  |
+|:----------------------:|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **certificate**        | String       | If you want to create an HTTPS server, pass in the path to PEM-encoded certificate and key                                                                                                                                                                                                                   |
+| **key**                | String       | If you want to create an HTTPS server, pass in the path to PEM-encoded certificate and key                                                                                                                                                                                                                   |
+| **formatters**         | Object       | Custom response formatters for `res.send()`                                                                                                                                                                                                                                                                  |
+| **log**                | Object       | You can optionally pass in a [bunyan](https://github.com/trentm/node-bunyan) instance; not required                                                                                                                                                                                                          |
+| **name**               | String       | By default, this will be set in the `Server` response header, default is `restify`                                                                                                                                                                                                                           |
+| **spdy**               | Object       | Any options accepted by [node-spdy](https://github.com/indutny/node-spdy)                                                                                                                                                                                                                                    |
+| **version**            | String|Array | A default version to set for all routes                                                                                                                                                                                                                                                                      |
+| **handleUpgrades**     | Boolean      | Hook the `upgrade` event from the node HTTP server, pushing Connection: Upgrade requests through the regular request handling chain; defaults to `false`                                                                                                                                                     |
+| **httpsServerOptions** | Object       | Any options accepted by [node-https Server](https://nodejs.org/api/https.html#https_https). If provided the following restify server options will be ignored: spdy, ca, certificate, key, passphrase, rejectUnauthorized, requestCert and ciphers; however these can all be specified on httpsServerOptions. |
+
 # License
 
 MIT License
