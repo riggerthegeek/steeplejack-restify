@@ -16,7 +16,7 @@ import {EventEmitter} from "events";
 import * as _ from "lodash";
 import {IServerStrategy} from "steeplejack/interfaces/serverStrategy";
 import {Promise} from "es6-promise";
-let restify = require("restify");
+export const restifyLib = require("restify");
 
 
 /* Files */
@@ -49,7 +49,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
 
         super();
 
-        this._inst = restify.createServer({
+        this._inst = restifyLib.createServer({
             certificate: opts.certificate,
             formatters: opts.formatters,
             handleUpgrades: opts.handleUpgrades,
@@ -85,7 +85,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
 
         /* Default function */
         let fn: Function = (req: any, res: any, cb: Function) => {
-            restify.acceptParser(options)(req, res, cb);
+            restifyLib.acceptParser(options)(req, res, cb);
         };
 
         if (strict) {
@@ -99,7 +99,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
                 }
 
                 /* Uh-oh - haven't matched the accept type */
-                let err = new restify.WrongAcceptError(`Server accepts: ${options.join()}`);
+                let err = new restifyLib.WrongAcceptError(`Server accepts: ${options.join()}`);
 
                 res.json(err);
                 cb(false);
@@ -176,7 +176,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      */
     public bodyParser () {
 
-        this.use(restify.bodyParser());
+        this.use(restifyLib.bodyParser());
 
     }
 
@@ -208,11 +208,11 @@ export class Restify extends EventEmitter implements IServerStrategy {
 
         if (_.isArray(addHeaders)) {
             _.each(addHeaders, (header: string) => {
-                restify.CORS.ALLOW_HEADERS.push(header);
+                restifyLib.CORS.ALLOW_HEADERS.push(header);
             });
         }
 
-        this.use(restify.CORS({
+        this.use(restifyLib.CORS({
             origins
         }));
 
@@ -249,7 +249,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * Sets the response to be GZIP compressed
      */
     public gzipResponse () {
-        this.use(restify.gzipResponse());
+        this.use(restifyLib.gzipResponse());
     }
 
 
@@ -285,7 +285,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      */
     public queryParser (mapParams: boolean = false) {
 
-        this.use(restify.queryParser({
+        this.use(restifyLib.queryParser({
             mapParams
         }));
 

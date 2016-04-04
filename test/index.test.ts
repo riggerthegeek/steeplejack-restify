@@ -14,7 +14,7 @@ import {EventEmitter} from "events";
 /* Third-party modules */
 import * as chai from "chai";
 import * as proxyquire from "proxyquire";
-let restify = require("restify");
+const restify = require("restify");
 import * as sinon from "sinon";
 import {Promise} from "es6-promise";
 import sinonChai = require("sinon-chai");
@@ -30,7 +30,7 @@ proxyquire.noCallThru();
 
 
 /* Files */
-import {Restify as Original} from "../index";
+import {Restify as Original, restifyLib} from "../index";
 
 
 class ApplicationException extends FatalException {
@@ -76,6 +76,8 @@ describe("index test", function () {
         Restify = proxyquire("../index", {
             restify: rest
         }).Restify;
+
+        expect(restifyLib).to.be.equal(restify);
 
     });
 
