@@ -323,6 +323,74 @@ describe("index test", function () {
 
             });
 
+            it("should map the Steeplejack verb to the Restify verb - options", function (done: any) {
+
+                let result = (req, res) => {
+                    expect(req).to.be.equal(this.req);
+                    expect(res).to.be.equal(this.res);
+
+                    return Promise.resolve("my result");
+                };
+
+                this.server.opts = (route: string, iterator: any) => {
+
+                    expect(route).to.be.equal("/path/to/route");
+
+                    iterator(this.req, this.res, this.next)
+                        .then((result) => {
+
+                            expect(result).to.be.undefined;
+
+                            expect(this.next).to.be.calledOnce
+                                .calledWithExactly();
+
+                            done();
+
+                        });
+
+                };
+
+                this.stub = sinon.stub(this.obj, "getServer")
+                    .returns(this.server);
+
+                expect(this.obj.addRoute("OPTIOnS", "/path/to/route", result)).to.be.undefined;
+
+            });
+
+            it("should map the Steeplejack verb to the Restify verb - delete", function (done: any) {
+
+                let result = (req, res) => {
+                    expect(req).to.be.equal(this.req);
+                    expect(res).to.be.equal(this.res);
+
+                    return Promise.resolve("my result");
+                };
+
+                this.server.del = (route: string, iterator: any) => {
+
+                    expect(route).to.be.equal("/path/to/route");
+
+                    iterator(this.req, this.res, this.next)
+                        .then((result) => {
+
+                            expect(result).to.be.undefined;
+
+                            expect(this.next).to.be.calledOnce
+                                .calledWithExactly();
+
+                            done();
+
+                        });
+
+                };
+
+                this.stub = sinon.stub(this.obj, "getServer")
+                    .returns(this.server);
+
+                expect(this.obj.addRoute("DELEtE", "/path/to/route", result)).to.be.undefined;
+
+            });
+
             it("should add to the function with a lower case method", function (done:any) {
 
                 let result = (req, res) => {

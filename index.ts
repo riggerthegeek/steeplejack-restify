@@ -23,6 +23,13 @@ export const restifyLib = require("restify");
 import {IRestifyOpts} from "./interfaces/restifyOpts";
 
 
+/* Maps the HTTP verbs to the Restify verb */
+const verbMapper = {
+    "delete": "del",
+    "options": "opts"
+};
+
+
 export class Restify extends EventEmitter implements IServerStrategy {
 
 
@@ -124,7 +131,13 @@ export class Restify extends EventEmitter implements IServerStrategy {
      */
     public addRoute (httpMethod: string, route: string, iterator: (request: any, response: any) => Promise<any>) {
 
+        /* Restify requires lower case method names */
         let method = httpMethod.toLowerCase();
+
+        /* Replace the Steeplejack verb with the Restify verb */
+        if (_.has(verbMapper, method)) {
+            method = verbMapper[method];
+        }
 
         this.getServer()[method](route, (req: any, res: any, next: Function) => {
             return iterator(req, res)
