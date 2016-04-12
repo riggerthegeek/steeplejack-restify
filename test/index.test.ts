@@ -869,25 +869,32 @@ describe("index test", function () {
 
         describe("#uncaughtException", function () {
 
-            it("should add listener to the uncaughtException event", function () {
+            it("should add listener to the uncaughtException event", function (done: any) {
 
                 let obj = new Restify();
 
-                let spy = sinon.spy();
+                let on = sinon.stub()
+                    .yields("req", "res", "route", "err");
 
                 let stub = sinon.stub(obj, "getServer")
                     .returns({
-                        on: spy
+                        on
                     });
 
-                let fn = () => {};
+                let fn = (req, res, err, ...args) => {
+
+                    expect(req).to.be.equal("req");
+                    expect(res).to.be.equal("res");
+                    expect(err).to.be.equal("err");
+                    expect(args).to.be.eql([]);
+
+                    done();
+
+                };
 
                 expect(obj.uncaughtException(fn)).to.be.undefined;
 
                 expect(stub).to.be.calledOnce;
-
-                expect(spy).to.be.calledOnce
-                    .calledWithExactly("uncaughtException", fn);
 
             });
 

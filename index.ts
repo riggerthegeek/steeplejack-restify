@@ -343,9 +343,11 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {Function} fn
      */
-    public uncaughtException (fn: Function) {
+    public uncaughtException (fn: (req: any, res: any, err: Error) => void) {
 
-        this.getServer().on("uncaughtException", fn);
+        this.getServer().on("uncaughtException", (req: any, res: any, route: any, err: Error) => {
+            fn(req, res, err);
+        });
 
     }
 
