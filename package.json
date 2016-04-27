@@ -47,13 +47,13 @@
     "mocha": "^2.4.5",
     "onchange": "^2.1.2",
     "proxyquire": "^1.7.4",
-    "remap-istanbul": "^0.5.1",
+    "remap-istanbul": "^0.6.3",
     "restify": "^4.0.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "steeplejack": "^2.0.0-9",
     "tslint": "^3.6.0",
     "typescript": "^1.8.9",
-    "typings": "^0.7.9"
+    "typings": "^0.8.1"
   }
 }
