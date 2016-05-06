@@ -670,6 +670,22 @@ describe("index test", function () {
 
         });
 
+        describe("#getRawServer", function () {
+
+            it("should return the _inst.server", function () {
+
+                let obj = new Restify();
+
+                obj._inst = {
+                    server: "result"
+                };
+
+                expect(obj.getRawServer()).to.be.equal("result");
+
+            });
+
+        });
+
         describe("#getServer", function () {
 
             it("should return the _inst", function () {

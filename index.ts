@@ -233,6 +233,18 @@ export class Restify extends EventEmitter implements IServerStrategy {
 
 
     /**
+     * Get Raw Server
+     *
+     * Returns the raw server
+     *
+     * @returns {object}
+     */
+    getRawServer () {
+        return this._inst.server;
+    }
+
+
+    /**
      * Get Server
      *
      * Gets the server instance
