@@ -285,8 +285,8 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * directly or bundled up into a closure and passed
      * around.
      *
-     * @param {*} err
-     * @param {*} data
+     * @param {number} statusCode
+     * @param {*} output
      * @param {object} request
      * @param {object} response
      */
