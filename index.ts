@@ -83,6 +83,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      *
      * @param {string[]} options
      * @param {boolean} strict
+     * @returns {Restify}
      */
     public acceptParser (options: string[] = null, strict: boolean = false) {
 
@@ -115,7 +116,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
 
         }
 
-        this.use(fn);
+        return this.use(fn);
 
     }
 
@@ -128,6 +129,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {string} httpMethod
      * @param {string} route
      * @param {Function} iterator
+     * @returns {Restify}
      */
     public addRoute (httpMethod: string, route: string, iterator: (request: any, response: any) => Promise<any>) {
 
@@ -150,6 +152,8 @@ export class Restify extends EventEmitter implements IServerStrategy {
                 });
         });
 
+        return this;
+
     }
 
 
@@ -159,10 +163,13 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * Set up a listener for the after event
      *
      * @param {Function} fn
+     * @returns {Restify}
      */
     public after (fn: Function) {
 
         this.getServer().on("after", fn);
+
+        return this;
 
     }
 
@@ -174,10 +181,13 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * of the stack
      *
      * @param {Function} fn
+     * @returns {Restify}
      */
     public before (fn: Function) {
 
         this.getServer().pre(fn);
+
+        return this;
 
     }
 
@@ -186,10 +196,12 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * Body Parser
      *
      * Allows the server to receive the HTTP body.
+     *
+     * @returns {Restify}
      */
     public bodyParser () {
 
-        this.use(restifyLib.bodyParser());
+        return this.use(restifyLib.bodyParser());
 
     }
 
@@ -198,10 +210,14 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * Close
      *
      * Closes the server.
+     *
+     * @returns {Restify}
      */
     public close () {
 
         this.getServer().close();
+
+        return this;
 
     }
 
@@ -216,6 +232,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @link http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
      * @param {string[]} origins
      * @param {string[]} addHeaders
+     * @returns {Restify}
      */
     public enableCORS (origins: string[], addHeaders: string[] = []) {
 
@@ -225,7 +242,7 @@ export class Restify extends EventEmitter implements IServerStrategy {
             });
         }
 
-        this.use(restifyLib.CORS({
+        return this.use(restifyLib.CORS({
             origins
         }));
 
@@ -272,9 +289,11 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * GZIP Response
      *
      * Sets the response to be GZIP compressed
+     *
+     * @returns {Restify}
      */
     public gzipResponse () {
-        this.use(restifyLib.gzipResponse());
+        return this.use(restifyLib.gzipResponse());
     }
 
 
@@ -289,11 +308,14 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * @param {*} output
      * @param {object} request
      * @param {object} response
+     * @returns {Restify}
      */
     public outputHandler (statusCode: Number, output: any, request: any, response: any) {
 
         /* Display the output */
         response.send(statusCode, output);
+
+        return this;
 
     }
 
@@ -307,10 +329,11 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * to make it chainable.
      *
      * @param {boolean} mapParams
+     * @returns {Restify}
      */
     public queryParser (mapParams: boolean = false) {
 
-        this.use(restifyLib.queryParser({
+        return this.use(restifyLib.queryParser({
             mapParams
         }));
 
@@ -354,12 +377,15 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * Listens for an uncaught exception
      *
      * @param {Function} fn
+     * @returns {Restify}
      */
     public uncaughtException (fn: (req: any, res: any, err: Error) => void) {
 
         this.getServer().on("uncaughtException", (req: any, res: any, route: any, err: Error) => {
             fn(req, res, err);
         });
+
+        return this;
 
     }
 
@@ -371,10 +397,13 @@ export class Restify extends EventEmitter implements IServerStrategy {
      * add middleware functions to the stack
      *
      * @param {Function} fn
+     * @returns {Restify}
      */
     public use (fn: Function | Function[]) {
 
         this.getServer().use(fn);
+
+        return this;
 
     }
 
