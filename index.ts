@@ -152,8 +152,6 @@ export class Restify extends EventEmitter implements IServerStrategy {
                 });
         });
 
-        return this;
-
     }
 
 

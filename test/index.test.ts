@@ -509,7 +509,7 @@ describe("index test", function () {
 
                 let fn = () => {};
 
-                expect(obj.after(fn)).to.be.undefined;
+                expect(obj.after(fn)).to.be.equal(obj);
 
                 expect(stub).to.be.calledOnce;
 
@@ -535,7 +535,7 @@ describe("index test", function () {
 
                 let fn = () => {};
 
-                expect(obj.before(fn)).to.be.undefined;
+                expect(obj.before(fn)).to.be.equal(obj);
 
                 expect(stub).to.be.calledOnce;
 
@@ -554,7 +554,7 @@ describe("index test", function () {
 
                 let spy = sinon.spy(obj, "use");
 
-                expect(obj.bodyParser()).to.be.undefined;
+                expect(obj.bodyParser()).to.be.equal(obj);
 
                 expect(spy).to.be.calledOnce
                     .calledWithExactly("bodyParser");
@@ -576,7 +576,7 @@ describe("index test", function () {
                         close: spy
                     });
 
-                expect(obj.close()).to.be.undefined;
+                expect(obj.close()).to.be.equal(obj);
 
                 expect(stub).to.be.calledOnce;
 
@@ -597,7 +597,7 @@ describe("index test", function () {
 
                 expect(obj.enableCORS([
                     "http://localhost:9000"
-                ])).to.be.undefined;
+                ])).to.be.equal(obj);
 
                 expect(rest.CORS).to.be.calledOnce
                     .calledWith({
@@ -619,7 +619,7 @@ describe("index test", function () {
 
                 expect(obj.enableCORS([
                     "http://localhost:9000"
-                ], null)).to.be.undefined;
+                ], null)).to.be.equal(obj);
 
                 expect(rest.CORS).to.be.calledOnce
                     .calledWith({
@@ -645,7 +645,7 @@ describe("index test", function () {
                     "http://localhost:9000"
                 ], [
                     "auth"
-                ])).to.be.undefined;
+                ])).to.be.equal(obj);
 
                 expect(rest.CORS).to.be.calledOnce
                     .calledWith({
@@ -719,7 +719,7 @@ describe("index test", function () {
 
                 let spy = sinon.spy(obj, "use");
 
-                expect(obj.gzipResponse()).to.be.undefined;
+                expect(obj.gzipResponse()).to.be.equal(obj);
 
                 expect(spy).to.be.calledOnce
                     .calledWithExactly("gzipResponse");
@@ -750,7 +750,7 @@ describe("index test", function () {
                     hello: "world"
                 };
 
-                expect(obj.outputHandler(201, data, req, res)).to.be.undefined;
+                expect(obj.outputHandler(201, data, req, res)).to.be.equal(obj);
 
                 expect(res.send).to.be.calledOnce
                     .calledWithExactly(201, data);
@@ -767,7 +767,7 @@ describe("index test", function () {
 
                 let spy = sinon.spy(obj, "use");
 
-                expect(obj.queryParser()).to.be.undefined;
+                expect(obj.queryParser()).to.be.equal(obj);
 
                 expect(rest.queryParser).to.be.calledOnce
                     .calledWithExactly({
@@ -785,7 +785,7 @@ describe("index test", function () {
 
                 let spy = sinon.spy(obj, "use");
 
-                expect(obj.queryParser(false)).to.be.undefined;
+                expect(obj.queryParser(false)).to.be.equal(obj);
 
                 expect(rest.queryParser).to.be.calledOnce
                     .calledWithExactly({
@@ -803,7 +803,7 @@ describe("index test", function () {
 
                 let spy = sinon.spy(obj, "use");
 
-                expect(obj.queryParser(true)).to.be.undefined;
+                expect(obj.queryParser(true)).to.be.equal(obj);
 
                 expect(rest.queryParser).to.be.calledOnce
                     .calledWithExactly({
@@ -903,7 +903,7 @@ describe("index test", function () {
 
                 };
 
-                expect(obj.uncaughtException(fn)).to.be.undefined;
+                expect(obj.uncaughtException(fn)).to.be.equal(obj);
 
                 expect(stub).to.be.calledOnce;
 
@@ -925,7 +925,7 @@ describe("index test", function () {
                     use: spy
                 });
 
-                expect(obj.use(fn)).to.be.undefined;
+                expect(obj.use(fn)).to.be.equal(obj);
 
                 expect(stub).to.be.calledOnce
                     .calledWithExactly();
