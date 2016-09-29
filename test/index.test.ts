@@ -2,8 +2,6 @@
  * index
  */
 
-/// <reference path="../typings/main.d.ts" />
-
 "use strict";
 
 
@@ -18,10 +16,7 @@ const restify = require("restify");
 import * as sinon from "sinon";
 import {Promise} from "es6-promise";
 import sinonChai = require("sinon-chai");
-import {Collection} from "steeplejack/lib/collection";
-import {Model} from "steeplejack/lib/model";
 import {FatalException} from "steeplejack/exception/fatal";
-import {ValidationException} from "steeplejack/exception/validation/index";
 
 chai.use(sinonChai);
 
